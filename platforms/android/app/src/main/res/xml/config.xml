@@ -30,8 +30,8 @@
     <feature name="Permissions">
         <param name="android-package" value="com.android.plugins.Permissions" />
     </feature>
-    <feature name="PDFService">
-        <param name="android-package" value="com.pdf.generator.PDFGenerator" />
+    <feature name="Insomnia">
+        <param name="android-package" value="nl.xservices.plugins.Insomnia" />
     </feature>
     <name>App Inventarios</name>
     <description>Sample Apache Cordova App</description>
@@ -43,7 +43,6 @@
     <allow-navigation href="https://*/*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-    <plubin name="cordova-plugin-file" />
     <config-file parent="/manifest" target="AndroidManifest.xml">
         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
         <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -53,5 +52,5 @@
     <preference name="AndroidGradlePluginVersion" value="8.3.0" />
     <preference name="android-versionName" value="1.0.21" />
     <preference name="android-minSdkVersion" value="24" />
-    <preference name="android-targetSdkVersion" value="34" />
+    <preference name="android-targetSdkVersion" value="35" />
 </widget>

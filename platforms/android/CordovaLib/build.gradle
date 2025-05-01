@@ -86,9 +86,10 @@ android {
 }
 
 dependencies {
-    api "androidx.appcompat:appcompat:${cordovaConfig.ANDROIDX_APP_COMPAT_VERSION}"
-    implementation "androidx.webkit:webkit:${cordovaConfig.ANDROIDX_WEBKIT_VERSION}"
-    implementation "androidx.core:core-splashscreen:${cordovaConfig.ANDROIDX_CORE_SPLASHSCREEN_VERSION}"
+    api "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.webkit:webkit:1.10.0"
+    implementation "androidx.core:core-splashscreen:1.0.1"
+    implementation "androidx.window:window:1.2.0"
 }
 
 /**

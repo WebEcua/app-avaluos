@@ -38,7 +38,7 @@
     "cordova-plugin-android-permissions": {
       "PACKAGE_NAME": "work.gestor2.www"
     },
-    "cordova-pdf-generator": {
+    "cordova-plugin-insomnia": {
       "PACKAGE_NAME": "work.gestor2.www"
     }
   },

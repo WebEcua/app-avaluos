@@ -1,4 +1,5 @@
-cordova.define("cordova-pdf-generator.pdf", function(require, exports, module) { /*global cordova, module*/
+cordova.define("cordova-pdf-generator.pdf", function(require, exports, module) {
+/*global cordova, module*/
 
 
 function opts(options){

@@ -26,21 +26,13 @@ class dataBase{
         let version;
         //alert(navigator.platform);
        
-        if( /MacIntel/i.test(navigator.platform) ) {
-            
-            version = "1.0";
-        //}else{
-            //version = "2.2";
-        //}
-            db = window.openDatabase(base_datos, version, "Base de datos APP", 1000000)
-        }else{
+        
             
               db = window.sqlitePlugin.openDatabase({
                   name: base_datos,
                   location: 'default',
                   androidDatabaseProvider: 'system'
               });
-        }
         
         
         
@@ -163,7 +155,7 @@ class dataBase{
             tx.executeSql('SELECT * FROM '+sql.tabla+where, [], 
 				function (tx2, results) {
                 let res = [];
-				console.log(results)
+				console.log("resultado query",results)
                 for(var i= 0;i <= results.rows.length-1;i++){
 					if( /MacIntel/i.test(navigator.platform) ) {
                     	res.push(results.rows[i]);

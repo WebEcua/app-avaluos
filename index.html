@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en" class="default-style layout-footer-fixed">
+<head>
+  <title>Login v1 - Pages - Appwork</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src * https: 'unsafe-inline' file:; style-src 'self' 'unsafe-inline' *; script-src 'self' 'unsafe-inline' 'unsafe-eval' * https: file; connect-src 'self' 'unsafe-inline' data: *; img-src * https: data:; ">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+  <!-- Icon fonts -->
+  <link rel="stylesheet" href="assets/fonts/fontawesome.css">
+  <link rel="stylesheet" href="assets/fonts/ionicons.css">
+  <link rel="stylesheet" href="assets/fonts/linearicons.css">
+  <link rel="stylesheet" href="assets/fonts/open-iconic.css">
+  <link rel="stylesheet" href="assets/fonts/pe-icon-7-stroke.css">
+
+  <!-- Core stylesheets -->
+  <link rel="stylesheet" href="assets/css/rtl/bootstrap.css" class="theme-settings-bootstrap-css">
+  <link rel="stylesheet" href="assets/css/rtl/appwork.css" class="theme-settings-appwork-css">
+  <link rel="stylesheet" href="assets/css/rtl/theme-corporate.css" class="theme-settings-theme-css">
+  <link rel="stylesheet" href="assets/css/rtl/colors.css" class="theme-settings-colors-css">
+  <link rel="stylesheet" href="assets/css/rtl/uikit.css">
+  <link rel="stylesheet" href="assets/css/css.css">
+  <link rel="stylesheet" href="assets/libs/select2/select2.css" />
+
+  <script src="assets/js/material-ripple.js"></script>
+  <script src="assets/js/layout-helpers.js"></script>
+
+  <!-- Theme settings -->
+  <!-- This file MUST be included after core stylesheets and layout-helpers.js in the <head> section -->
+  <script src="assets/js/theme-settings.js"></script>
+  <script>
+    /*window.themeSettings = new ThemeSettings({
+      cssPath: 'assets/css/rtl/',
+      themesPath: 'assets/css/rtl/'
+    });*/
+  </script>
+
+  <!-- Core scripts -->
+  <script src="assets/js/pace.js"></script>
+  <script src="assets/js/jquery-3.3.1.min.js"></script>
+
+  <!-- Libs -->
+  <link rel="stylesheet" href="assets/libs/perfect-scrollbar/perfect-scrollbar.css">
+  <!-- Page -->
+  <link rel="stylesheet" href="assets/css/pages/authentication.css">
+</head>
+
+<body class="fondo">
+    <div class="d-none" id="actividad"></div>
+  <div class="page-loader">
+    <div class="bg-primary"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="authentication-wrapper authentication-1 px-4">
+    <div class="authentication-inner py-5">
+
+      <!-- Logo -->
+      <div class="d-flex justify-content-center align-items-center">
+        <div class="">
+          <div class="w-100 position-relative" style="padding-bottom: 18%">
+            <img src="assets/img/logo-completo.svg" width="100%">
+          </div>
+        </div>
+      </div>
+      <!-- / Logo -->
+
+      <!-- Form -->
+      <form class="my-5" id="login">
+        <div class="form-group">
+          <label class="form-label">Correo eléctronico</label>
+          <input type="text" class="form-control" name="usuario" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label d-flex justify-content-between align-items-end">
+            <div>Contraseña</div>
+            <a href="javascript:void(0)" class="d-block small">olvidó la contraseña?</a>
+          </label>
+          <input type="password" class="form-control" name="contrasenia" required>
+            <input type="hidden" name="acc" value="Login" />
+        </div>
+		<div class="form-group" id="mensaje"></div>
+        <div class="d-flex justify-content-between align-items-center m-0">
+          <label class="custom-control custom-checkbox m-0">
+            <input type="checkbox" class="custom-control-input">
+            <span class="custom-control-label">Recordar datos</span>
+          </label>
+          <button type="button" id="loginBtn" class="btn is-primary">Ingresar</button>
+        </div>
+      </form>
+      <!-- / Form -->
+
+      <div class="text-center text-muted d-none">
+        Don't have an account yet?
+        <a href="javascript:void(0)">Sign Up</a>
+      </div>
+
+    </div>
+  </div>
+  <!-- / Content -->
+  <!-- Disenio -->
+  <div class="layout-wrapper layout-2">
+      <div class="layout-inner">
+          
+         <div id="layout-sidenav" class="layout-sidenav sidenav sidenav-vertical bg-sidenav-theme">
+
+        <!-- Brand demo (see assets/css/demo/demo.css) -->
+        <div class="app-brand demo p-2 bg-white">
+          <a href="index.html" class="demo sidenav-text font-weight-normal ml-2"><img src="assets/img/logo-completo.svg" width="80%" /></a>
+          <a href="javascript:void(0)" class="layout-sidenav-toggle sidenav-link text-large ml-auto">
+            <i class="ion ion-md-menu align-middle"></i>
+          </a>
+        </div>
+
+        <div class="sidenav-divider mt-0"></div>
+
+        <!-- Links -->
+        <ul class="sidenav-inner py-1 ps ps--active-y">
+
+          <!-- Dashboards -->
+          <li class="sidenav-item active"  onClick="interfaz.irSeccion('dashboard',this)">
+            <a href="javascript:void(0)" class="sidenav-link tarjeta2" data-objetivo="0">
+              <i class="sidenav-icon ion ion-md-speedometer"></i>
+              <div>Dashboards</div>
+            </a>
+          </li>
+          <li class="sidenav-item"  onClick="interfaz.irSeccion('validar',this)">
+            <a href="javascript:void(0)" class="sidenav-link tarjeta2" data-objetivo="3">
+              <i class="sidenav-icon fa fa-barcode"></i>
+              <div>Validar activos</div>
+            </a>
+          </li>
+          <li class="sidenav-item"  onClick="interfaz.listadoArchivos()">
+            <a href="javascript:void(0)" class="sidenav-link" data-objetivo="3">
+              <i class="sidenav-icon fa fa-barcode"></i>
+              <div>Listado de Archivos</div>
+            </a>
+          </li>
+
+          <!-- Layouts -->
+          <li class="sidenav-item d-none"  onClick="interfaz.irSeccion('registros',this)">
+            <a href="javascript:void(0)" class="sidenav-link" >
+              <i class="sidenav-icon ion md-exit"></i>
+              <div>Historial</div>
+            </a>
+          </li>
+            <li class="sidenav-item">
+            <a href="javascript:void(interfaz.cierraSesion())" class="sidenav-link" >
+              <i class="sidenav-icon ion ion-md-exit"></i>
+              <div>Cerrar Sesión</div>
+            </a>
+          </li>
+
+          <li class="sidenav-divider mb-1"></li>
+          <li class="sidenav-header d-none small d-none font-weight-semibold">ELEMENTS</li>
+
+          
+
+          <!-- UI elements -->
+          <li class="sidenav-item d-none">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
+              <i class="sidenav-icon ion ion-md-cube"></i>
+              <div>User inteface</div>
+            </a>
+
+            <ul class="sidenav-menu">
+              <li class="sidenav-item">
+                <a href="ui_buttons.html" class="sidenav-link">
+                  <div>Buttons</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_badges.html" class="sidenav-link">
+                  <div>Badges</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_button-groups.html" class="sidenav-link">
+                  <div>Button groups</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_dropdowns.html" class="sidenav-link">
+                  <div>Dropdowns</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_navs.html" class="sidenav-link">
+                  <div>Navs</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_pagination.html" class="sidenav-link">
+                  <div>Pagination and breadcrumbs</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_progress.html" class="sidenav-link">
+                  <div>Progress bars</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_list-groups.html" class="sidenav-link">
+                  <div>List groups</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_notifications.html" class="sidenav-link">
+                  <div>Notifications</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_modals.html" class="sidenav-link">
+                  <div>Modals</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_tooltips.html" class="sidenav-link">
+                  <div>Tooltips and popovers</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_thumbnails.html" class="sidenav-link">
+                  <div>Thumbnails</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_cards.html" class="sidenav-link">
+                  <div>Cards</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_accordion.html" class="sidenav-link">
+                  <div>Accordion</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_app-brand.html" class="sidenav-link">
+                  <div>App brand</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_navbar.html" class="sidenav-link">
+                  <div>Navbar</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_sidenav.html" class="sidenav-link">
+                  <div>Sidenav</div>
+                </a>
+              </li>
+              
+              <li class="sidenav-item">
+                <a href="ui_carousel.html" class="sidenav-link">
+                  <div>Carousel</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_lightbox.html" class="sidenav-link">
+                  <div>Lightbox</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_drag-and-drop.html" class="sidenav-link">
+                  <div>Drag&amp;Drop</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_treeview.html" class="sidenav-link">
+                  <div>Treeview</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_media-player.html" class="sidenav-link">
+                  <div>Plyr</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_cropper.html" class="sidenav-link">
+                  <div>Cropper.js</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_tour.html" class="sidenav-link">
+                  <div>Bootstrap tour</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="ui_fullcalendar.html" class="sidenav-link">
+                  <div>Fullcalendar</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+
+          <!--  Miscellaneous -->
+          
+
+          <!-- Pages -->
+
+        </ul>
+      </div> 
+          
+          <div class="layout-container d-none">
+          
+          <nav class="layout-navbar navbar navbar-expand-lg align-items-lg-center container-p-x" id="layout-navbar">
+
+          <!-- Brand demo (see assets/css/demo/demo.css) -->
+          <a href="index.html" class="navbar-brand app-brand demo d-lg-none py-0 mr-4">
+            <span class="app-brand-text demo font-weight-normal ml-2"><img src="assets/img/logo.svg" width="40" /></span>
+          </a>
+
+          <!-- Sidenav toggle (see assets/css/demo/demo.css) -->
+          <div class="layout-sidenav-toggle navbar-nav d-lg-none align-items-lg-center mr-auto">
+            <a class="nav-item nav-link px-0 mr-lg-4" href="javascript:void(0)">
+              <i class="ion ion-md-menu text-large align-middle"></i>
+            </a>
+          </div>
+
+          <button class="navbar-toggler bt-sm btn-danger d-none" id="boton_opciones" type="button">
+            <i class="fa fa-plus fa-2x"></i>
+          </button>
+
+        </nav>
+          
+           <div class="layout-content">
+              <div class="d-none" id="interaccion"  data-llave="">
+		
+        
+			
+			<div id="tarjetas" class="carousel slide">
+				<div class="carousel-inner">
+    				<div class="carousel-item active" data-title="DashBoard">
+						<div class="container">
+                          <div class="card mb-2 text-dark">
+                              <div class="card-body">
+                                <div class="row">
+                              <div class="col p-0 text-center">
+                                  <div class="p-1">
+                                  <h2 id="Guardados" class="mb-0 pt-2">0</h2>
+                                  <div class="small text-muted pb-2"><strong>Guardados</strong></div>
+                                  </div>
+                              </div>
+                              <div class="col p-0 text-center">
+                                  <div class="p-1 border-left">
+                                  <h2 id="Pendientes" class="mb-0 pt-2">0</h2>
+                                  <div class="small text-muted pb-2"><strong>Registros</strong></div>
+                                  </div>
+                              </div>
+                          
+                          </div>
+                              </div>
+                          </div>
+                          <div class="card bg-success border-0 text-white mb-2" id="estadoServicio">
+                              <div class="card-body d-flex justify-content-between align-items-center p-3">
+                                <div>
+                                  <div class="text-xlarge">99.9%</div>
+                                  <div class="small opacity-75 mensaje"><strong>Servidor en linea</strong></div>
+                                </div>
+                                <i class="fa fa-check-circle text-xlarge opacity-25"></i>
+                              </div>
+                          </div>
+                          <div class="card bg-primary border-0 text-white mb-2" id="selecCliente">
+                                  <div class="card-body d-flex justify-content-between align-items-center p-3">
+                                    <div>
+                                      <div class="text-large nombre">Seleccione un cliente</div>
+                                      <div class="small opacity-75 mensaje"><strong class="proyecto">Click aqui para cambiar</strong></div>
+                                    </div>
+                                    <i class="fa fa-sync-alt text-xlarge opacity-25"></i>
+                                  </div>
+                          </div>
+                          
+                          <div class="row no-gutters mb-3 d-none" id="botonera">
+                          
+                          <div class="col pl-0 pr-1  mb-2">
+							  <a id="sincronizar" class="btn btn-secondary col text-white" data-objetivo="5">Sincronizar</a>  
+						  </div>
+                          <div class="col pr-0 mb-2 d-none" id="contenedor-servicios"><a class="btn btn-outline-primary tarjeta2 col"  data-objetivo="1">Servicios</a></div>
+                          <div class="col-12 mb-2">
+                          <a class="btn btn-default disabled col agregarFormulario" id="agregarInventario" data-servicio="1">
+                               Agregar inventario
+                              </a>     
+                          </div>
+						              <div class="col-12 mb-2">
+                            <a class="btn btn-default disabled col" id="validarInventario" data-servicio="1">
+                                <i class="fa fa-barcode"></i> Validar Activo
+                            </a>
+                            <input type="text" class="d-none" name="buscarCodigo" placeholder="Buscar: " id="buscarCodigo">
+                          </div>
+                          <div class="col-12">
+                            <a class="btn btn-default disabled col" id="generarPDF" data-servicio="1">
+                                 <i class="fa fa-barcode"></i> Generar PDF
+                            </a>
+                          </div>
+                          </div>
+                              
+                            <a class="btn btn-danger d-none" id="eliminarAnterior"><i class="fa fa-trash"></i></a>
+                            <div class="">
+                                <h5>Últimos registros</h5>
+                                <div id="listadoLogs">
+                                    
+                                </div>
+                            </div>
+							
+						</div>
+						
+					</div>
+          <div class="carousel-item" data-title="Servicios">
+					<div class="container">
+						<div id="servicios">
+                                
+                        </div>
+					</div>
+					</div>
+					
+          <div class="carousel-item" data-title="Clientes">
+						<div class="container">
+				            <div id="listadoClientes">
+                            
+                            </div>
+                            
+						</div>
+                        
+						
+					</div>
+          <div class="carousel-item" data-title="Articulos">
+						<div class="container">
+                            <div class="busqueda d-none">
+                            <table class="mb-1 border-bottom w-100" id="busquedaActivo">
+                                
+                                
+                                <tr>
+                                    <td class="text-center"><input type="text" name="qr_busqueda" class="input" /></td>
+                                
+                                    <td class="text-center ba"><a id="barrasBuscar" data-objetivo="qr_busqueda" onclick="leerCodigo(this)" class="btn btn-secondary"><i class="fa fa-barcode"></i></a></td>
+                                </tr>
+                            
+                            
+                            </table>
+                                
+                            </div>
+                            <div><a class="btn btn-danger col" id="btnBuscarCodigo"><i class="fa fa-search"></i></a></div>
+				            <div id="listadoArticulos" class="d-none">
+                            
+                            </div>
+						</div>
+						
+					</div>
+          <div class="carousel-item" data-title="Formulario">
+              <form class="container" id="formularios">
+              
+              </form>
+          </div>
+					<div class="carousel-item" data-title="Historial de registros" style="height: 93.2vh;">
+                        <div id="historialRegistros">
+                            
+                        </div>
+						
+						
+						
+					</div>
+					
+					
+					<div class="carousel-item" data-title="Editar Información">
+						
+						<div class="container">
+							
+						</div>
+						
+					</div>
+					
+					<div class="carousel-item" data-title="Editar Información">
+						<div class="container">
+							
+						</div>
+					</div>
+					<div class="carousel-item" data-title="Editar Producto">
+						<div class="container">
+							
+						</div>
+					</div>
+					<div class="carousel-item" data-title="Bodegas">
+						<div class="container">
+							
+							
+						</div>
+					</div>
+					<div class="carousel-item" data-title="Listado de custodios">
+            Listado de Custodios.
+						<div class="container">
+							
+							
+						</div>
+					</div>
+          <div class="carousel-item" data-title="Listado de custodios">
+            
+						<div class="container">
+						<div id="listadoArchivos" style="height: 90vh; overflow-y:scroll; width: 100%;"></div>
+							
+						</div>
+					</div>
+					
+				</div>
+			</div><div id="modal-grande" class="modal h-modal is-big">
+            <div class="modal-background h-modal-close"></div>
+            <div class="modal-content">
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <h3>Invitation</h3>
+                        <button class="h-modal-close ml-auto" data-target="modal-grande" aria-label="close">
+                            <i class="fa fa-window-close"></i>
+                        </button>
+                    </header>
+                    <div class="modal-card-body">
+                        <div class="inner-content">
+                            <div class="section-placeholder">
+                                <div class="placeholder-content">
+                                    <div class="h-avatar is-xl">
+                                        <img class="avatar" src="https://via.placeholder.com/150x150" data-demo-src="assets/img/avatars/photos/22.jpg" alt="">
+                                        <img class="badge" src="https://via.placeholder.com/150x150" data-demo-src="assets/img/icons/flags/united-states-of-america.svg" alt="">
+                                    </div>
+                                    <h3 class="dark-inverted">You were invited</h3>
+                                    <p>Jimmy H. invited you to join the Heartman & Sons project.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-card-foot is-centered">
+                        <a class="button h-button is-rounded h-modal-close" data-target="modal-grande">Cerrar</a>
+                <a class="button h-button is-primary is-raised is-rounded d-none btnModal">Accept</a>
+                <a class="button h-button is-warning is-raised is-rounded d-none obtnModal">Opcional</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        	
+			
+			
+			
+
+	</div><nav class="layout-footer footer d-none">
+            <div class="container-fluid d-flex flex-wrap justify-content-between text-center container-p-x pb-3">
+    
+            </div>
+          </nav>
+           </div>
+          </div>
+      </div>
+      <div class="layout-overlay layout-sidenav-toggle"></div>
+  </div>
+  <!-- Disenio -->
+  <!-- Core scripts -->
+   <style>.btn-sm {
+      font-size: .65rem;
+    }</style>
+  <script src="assets/libs/popper/popper.js"></script>
+  <script src="assets/js/bootstrap.js"></script>
+  <script src="assets/js/sidenav.js"></script>
+
+  <!-- Libs -->
+  <script src="assets/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+  <!-- Datos -->
+  <script type="text/javascript" src="cordova.js"></script>
+  <script type="text/javascript" src="CameraPreview.js"></script>
+  <!--<script src="assets/js/ble.js" type="text/javascript"></script> -->
+  <script src="assets/libs/vanilla-text-mask/vanilla-text-mask.js"></script>
+  <script src="assets/libs/vanilla-text-mask/text-mask-addons.js"></script>
+    <script src="assets/libs/CryptoJS/components/core-min.js"></script>
+    <script src="assets/libs/CryptoJS/components/cipher-core.js"></script>
+    <script src="assets/libs/CryptoJS/components/aes.js"></script>
+    <script src="assets/libs/CryptoJS/components/enc-base64.js"></script>
+    <script src="assets/libs/CryptoJS/components/sha256-min.js"></script>
+    
+  <script src="assets/js/db.js"></script>
+    <script src="assets/js/camara.js"></script>
+    <script src="assets/js/clases.js"></script>
+    
+  <!-- Pnotify -->
+    <script src="assets/libs/select2/select2.js"></script>
+  <link href="assets/libs/pnotify/dist/pnotify.css" rel="stylesheet">
+  <link href="assets/libs/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+  <link href="assets/libs/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+  <link href="assets/libs/pnotify/dist/pnotify.brighttheme.css" rel="stylesheet">
+  <script src="assets/libs/pnotify/dist/pnotify.js"></script>
+  <script src="assets/libs/pnotify/dist/pnotify.buttons.js"></script>
+  <script src="assets/libs/pnotify/dist/pnotify.nonblock.js"></script>
+  <script src="assets/libs/pnotify/dist/pnotify.nonblock.js"></script>
+  <script src="assets/libs/pnotify/dist/pnotify.confirm.js"></script>
+  <script type="text/javascript" src="assets/js/sha512.js"></script>
+  <script src="assets/js/script.js?a"></script>
+  <style>
+    .h-modal.is-active {
+    z-index: 100 !important;
+}
+.modal.is-active {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+}
+.modal {
+    -webkit-transition: all .5s;
+    transition: all .5s;
+}
+.modal {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    display: none;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    overflow: hidden;
+    position: fixed;
+    z-index: 40;
+}
+.hero-video, .is-overlay, .modal-background, .modal, .image.is-square img, .image.is-square .has-ratio, .image.is-1by1 img, .image.is-1by1 .has-ratio, .image.is-5by4 img, .image.is-5by4 .has-ratio, .image.is-4by3 img, .image.is-4by3 .has-ratio, .image.is-3by2 img, .image.is-3by2 .has-ratio, .image.is-5by3 img, .image.is-5by3 .has-ratio, .image.is-16by9 img, .image.is-16by9 .has-ratio, .image.is-2by1 img, .image.is-2by1 .has-ratio, .image.is-3by1 img, .image.is-3by1 .has-ratio, .image.is-4by5 img, .image.is-4by5 .has-ratio, .image.is-3by4 img, .image.is-3by4 .has-ratio, .image.is-2by3 img, .image.is-2by3 .has-ratio, .image.is-3by5 img, .image.is-3by5 .has-ratio, .image.is-9by16 img, .image.is-9by16 .has-ratio, .image.is-1by2 img, .image.is-1by2 .has-ratio, .image.is-1by3 img, .image.is-1by3 .has-ratio {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.h-modal.is-active .h-modal-close {
+    cursor: pointer;
+}
+.h-modal .modal-background {
+    background-color: rgba(35, 35, 38, .8);
+}
+.modal-background {
+    background-color: rgba(10, 10, 10, .86);
+}
+.modal.is-biggest .modal-content {
+    width: 100% !important;
+    max-width: 90vw;
+}
+
+.modal.is-biggest .modal-content {
+    width: 100% !important;
+    max-width: 90vw;
+}
+.h-modal .modal-content {
+    -webkit-transform: scale(1) !important;
+    transform: scale(1) !important;
+    opacity: 1 !important;
+    max-width: 380px;
+    overflow-x: hidden;
+    -webkit-animation: fadeInDown .5s;
+    animation: fadeInDown .5s;
+    margin: 0;
+    padding: 0 10px;
+}
+.modal-card-body{
+  width: 94%;
+}
+.modal .modal-content {
+    -webkit-transition: all .4s;
+    transition: all .4s;
+}
+@media screen and (min-width: 769px) {
+    .modal-content, .modal-card {
+        margin: 0 auto;
+        max-height: calc(100vh - 40px);
+        width: inherit !important;
+    }
+}
+@media screen and (min-width: 769px) {
+    .modal-content, .modal-card {
+        margin: 0 auto;
+        max-height: calc(100vh - 40px);
+        width: 640px;
+    }
+}
+.modal-content, .modal-card {
+    margin: 0 20px;
+    max-height: calc(100vh - 160px);
+    overflow: auto;
+    position: relative;
+    width: 100%;
+}
+
+.h-modal .modal-content .modal-card .modal-card-head {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 15px 20px;
+    background: #fff;
+    border-bottom-color: #e5e5e5;
+}
+
+.modal-card-head {
+    border-bottom: 1px solid #dbdbdb;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+.modal-card-head, .modal-card-foot {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    padding: 20px;
+    position: relative;
+}
+.h-modal .modal-content .modal-card .modal-card-head .h-modal-close {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    background: none;
+    border-color: transparent;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    outline: none !important;
+}
+
+.h-modal.is-active .h-modal-close {
+    cursor: pointer;
+}
+.h-modal .modal-content .modal-card .modal-card-head h3 {
+    font-family: "Montserrat", sans-serif;
+    color: #283252;
+    font-weight: 600;
+    font-size: 1rem;
+}
+.h-modal .modal-content .modal-card .modal-card-foot.is-centered {
+    -webkit-box-pack: center !important;
+    -ms-flex-pack: center !important;
+    justify-content: center !important;
+}
+
+.h-modal .modal-content .modal-card .modal-card-foot {
+    background-color: #fff;
+    padding: 15px 20px;
+    border-top: 1px solid #e5e5e5;
+}
+.modal-card-foot {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-top: 1px solid #dbdbdb;
+}
+.h-modal .modal-content .modal-card .modal-card-foot .h-button {
+    min-width: 110px;
+}
+
+.h-modal.is-active .h-modal-close {
+    cursor: pointer;
+}
+.button.h-button {
+    padding: 8px 22px 8px 22px;
+    height: 38px;
+    line-height: 1.1;
+    font-size: .95rem;
+    font-family: "Roboto", sans-serif;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+
+.button.is-rounded {
+    border-radius: 290486px;
+    padding-left: calc(1em + 0.25em);
+    padding-right: calc(1em + 0.25em);
+}
+.button {
+    font-family: "Roboto", sans-serif;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+.button {
+    background-color: #fff;
+    border-color: #dbdbdb;
+    border-width: 1px;
+    color: #363636;
+    cursor: pointer;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    padding-bottom: calc(0.5em - 1px);
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: calc(0.5em - 1px);
+    text-align: center;
+    white-space: nowrap;
+}
+.button.is-primary {
+    background-color: #671cc9;
+    border-color: transparent;
+    color: #fff;
+}
+.button {
+    font-family: "Roboto", sans-serif;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+
+
+.pagination-previous, .pagination-next, .pagination-link, .pagination-ellipsis, .file-cta, .file-name, .select select, .textarea, .input, .button {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    /* border: 1px solid transparent; */
+    border-radius: 4px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex
+;
+    font-size: 1rem;
+    height: 2.5em;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    line-height: 1.5;
+    padding-bottom: calc(0.5em - 1px);
+    padding-left: calc(0.75em - 1px);
+    padding-right: calc(0.75em - 1px);
+    padding-top: calc(0.5em - 1px);
+    position: relative;
+    vertical-align: top;
+}
+.h-modal .modal-content .modal-card .modal-card-head{
+  padding:10px 0px;
+
+}
+  </style>
+</body>
+</html>

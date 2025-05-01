@@ -79,6 +79,7 @@ $(function(){
 
     
     interfaz = new Sistema('#formularios',_DOMINIO_);
+    alert();
     //interfaz.init();
     if( /MacIntel/i.test(navigator.platform) ) {
     interfaz.init();

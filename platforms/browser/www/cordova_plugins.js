@@ -290,13 +290,19 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-pdf-generator/www/pdf.js",
-        "id": "cordova-pdf-generator.pdf",
-        "pluginId": "cordova-pdf-generator",
+        "file": "plugins/cordova-plugin-insomnia/www/Insomnia.js",
+        "id": "cordova-plugin-insomnia.Insomnia",
+        "pluginId": "cordova-plugin-insomnia",
         "clobbers": [
-            "cordova.plugins.pdf",
-            "pugin.pdf",
-            "pdf"
+            "window.plugins.insomnia"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-insomnia/src/browser/Insomnia.js",
+        "id": "cordova-plugin-insomnia.InsomniaProxy",
+        "pluginId": "cordova-plugin-insomnia",
+        "merges": [
+            "window.plugins.insomnia"
         ]
     }
 ];
@@ -312,7 +318,7 @@ module.exports.metadata =
     "phonegap-plugin-barcodescanner": "8.1.0",
     "cordova-plugin-geolocation": "5.0.0",
     "cordova-plugin-android-permissions": "1.1.5",
-    "cordova-pdf-generator": "2.1.1"
+    "cordova-plugin-insomnia": "4.3.0"
 }
 // BOTTOM OF METADATA
 });

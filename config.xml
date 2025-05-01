@@ -15,7 +15,7 @@
     <platform name="android">
         <preference name="android-versionName" value="1.0.21" />
         <preference name="android-minSdkVersion" value="24" />
-        <preference name="android-targetSdkVersion" value="34" />
+        <preference name="android-targetSdkVersion" value="35" />
         <config-file parent="/manifest" target="AndroidManifest.xml">
             <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
             <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -24,7 +24,7 @@
     <plugin name="cordova-plugin-camera-preview" />
     <plugin name="cordova-plugin-camera" />
     <plugin name="cordova-sqlite-storage" />
-    <plugin name="cordova-pdf-generator" />
+    <plugin name="cordova-plugin-insomnia" />
     <plugin name="cordova-plugin-device" />
-    <plubin name="cordova-plugin-file" />
+    <plugin name="cordova-plugin-file" />
 </widget>

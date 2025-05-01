@@ -10,11 +10,11 @@
           "/manifest": [
             {
               "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
-              "count": 21
+              "count": 16
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
-              "count": 21
+              "count": 16
             },
             {
               "xml": "<uses-feature android:name=\"android.hardware.camera.autofocus\" android:required=\"false\" />",
@@ -147,7 +147,7 @@
               "count": 1
             },
             {
-              "xml": "<feature name=\"PDFService\"><param name=\"android-package\" value=\"com.pdf.generator.PDFGenerator\" /></feature>",
+              "xml": "<feature name=\"Insomnia\"><param name=\"android-package\" value=\"nl.xservices.plugins.Insomnia\" /></feature>",
               "count": 1
             }
           ]
@@ -187,7 +187,7 @@
     "cordova-plugin-android-permissions": {
       "PACKAGE_NAME": "work.gestor2.www"
     },
-    "cordova-pdf-generator": {
+    "cordova-plugin-insomnia": {
       "PACKAGE_NAME": "work.gestor2.www"
     }
   },
@@ -477,13 +477,11 @@
       ]
     },
     {
-      "id": "cordova-pdf-generator.pdf",
-      "file": "plugins/cordova-pdf-generator/www/pdf.js",
-      "pluginId": "cordova-pdf-generator",
+      "id": "cordova-plugin-insomnia.Insomnia",
+      "file": "plugins/cordova-plugin-insomnia/www/Insomnia.js",
+      "pluginId": "cordova-plugin-insomnia",
       "clobbers": [
-        "cordova.plugins.pdf",
-        "pugin.pdf",
-        "pdf"
+        "window.plugins.insomnia"
       ]
     }
   ],
@@ -497,6 +495,6 @@
     "phonegap-plugin-barcodescanner": "8.1.0",
     "cordova-plugin-geolocation": "5.0.0",
     "cordova-plugin-android-permissions": "1.1.5",
-    "cordova-pdf-generator": "2.1.1"
+    "cordova-plugin-insomnia": "4.3.0"
   }
 }

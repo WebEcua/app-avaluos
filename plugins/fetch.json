@@ -54,7 +54,7 @@
   "cordova-plugin-file": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-file@8.1.3"
+      "id": "cordova-plugin-file@^8.1.3"
     },
     "is_top_level": true,
     "variables": {}
@@ -91,10 +91,10 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-pdf-generator": {
+  "cordova-plugin-insomnia": {
     "source": {
       "type": "registry",
-      "id": "cordova-pdf-generator@^2.1.1"
+      "id": "cordova-plugin-insomnia"
     },
     "is_top_level": true,
     "variables": {}

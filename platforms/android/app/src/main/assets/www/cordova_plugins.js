@@ -17,15 +17,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-background-mode-fixed.BackgroundMode",
-      "file": "plugins/cordova-plugin-background-mode-fixed/www/background-mode.js",
-      "pluginId": "cordova-plugin-background-mode-fixed",
-      "clobbers": [
-        "cordova.plugins.backgroundMode",
-        "plugin.backgroundMode"
-      ]
-    },
-    {
       "id": "cordova-plugin-dialogs.notification",
       "file": "plugins/cordova-plugin-dialogs/www/notification.js",
       "pluginId": "cordova-plugin-dialogs",
@@ -293,20 +284,17 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-pdf-generator.pdf",
-      "file": "plugins/cordova-pdf-generator/www/pdf.js",
-      "pluginId": "cordova-pdf-generator",
+      "id": "cordova-plugin-insomnia.Insomnia",
+      "file": "plugins/cordova-plugin-insomnia/www/Insomnia.js",
+      "pluginId": "cordova-plugin-insomnia",
       "clobbers": [
-        "cordova.plugins.pdf",
-        "pugin.pdf",
-        "pdf"
+        "window.plugins.insomnia"
       ]
     }
   ];
   module.exports.metadata = {
     "cordova-sqlite-storage": "6.1.0",
     "cordova-plugin-device": "3.0.0",
-    "cordova-plugin-background-mode-fixed": "0.7.9",
     "cordova-plugin-dialogs": "2.0.2",
     "cordova-plugin-camera-preview": "0.13.0",
     "cordova-plugin-file": "8.1.3",
@@ -314,6 +302,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "phonegap-plugin-barcodescanner": "8.1.0",
     "cordova-plugin-geolocation": "5.0.0",
     "cordova-plugin-android-permissions": "1.1.5",
-    "cordova-pdf-generator": "2.1.1"
+    "cordova-plugin-insomnia": "4.3.0"
   };
 });

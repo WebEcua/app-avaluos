@@ -1,6 +1,6 @@
 {
-  "name": "app-avaluos",
-  "short_name": "app-avaluos",
+  "name": "App Inventarios",
+  "short_name": "App Inventarios",
   "description": "Description of your app from template",
   "start_url": "index.html",
   "scope": "index.html",

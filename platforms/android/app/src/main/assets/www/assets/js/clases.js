@@ -97,16 +97,16 @@ class Sistema {
     buscarModelo(text,objetivo){
         var acciones = this;
         this.base.query({"tabla":'ser_modelos',"where":"nombre like '%"+text+"%'"},function(res){
-			
+            
             let lista = $(objetivo);
             var html = "";
             ///lista.html(html);
             var mz = [];
-			console.log(res)
+			
 			html+="<div class='row item pb-1' onclick=\"interfaz.asignarModelo('otros','Otros')\">";
-					html+='<div class="col-8"><strong>Otros</strong></div>';
-					html+='<div class="col-2"><a class="btn btn-primary"><i class="fa fa-search"></i></a></div>';
-				html+='</div>';
+			    html+='<div class="col-8"><strong>Otros</strong></div>';
+				html+='<div class="col-2"><a class="btn btn-primary"><i class="fa fa-search"></i></a></div>';
+			html+='</div>';
 			if(res.length > 0){ 	
 				for(let ir in res){
 				html+="<div class='row item pb-1' onclick=\"interfaz.asignarModelo('"+res[ir].remoto+"','"+res[ir].nombre+"')\">";
@@ -1016,7 +1016,8 @@ class Sistema {
                 funcion.modal('Registrando base de datos','Se esta guardando los parametros del formulario, espere un momento por favor. <i class="fa fa-spin fa-spinner"></i>')
                 const tot = mod_.length;
                 let aumenta = 0
-                for(let io in mod_){    
+                for(let io in mod_){
+                console.log("MODELO",mod_[io]);    
                 funcion.base.insert({"tabla":'ser_modelos','registro':{"remoto":mod_[io].valor,'nombre':mod_[io].texto}},function(id){
                     //console.log('registra modelo en la base',mod_[io]) 
                     aumenta++;
