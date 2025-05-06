@@ -65,8 +65,12 @@ class dataBase{
 						if(io==0){ campos.push(ios); asq.push("?"); }
 						valores.push((typeof registro[ios]==="undefined" ? "":registro[ios]));
 					}
-                    console.log('INSERT INTO '+sql.tabla+' ('+campos.join(',')+')  VALUES ('+asq.join(",")+')')
-					tx.executeSql('INSERT INTO '+sql.tabla+' ('+campos.join(',')+')  VALUES ('+asq.join(",")+')',valores);
+                    //console.log("INFO: insertantdo en tabla",sql.tabla)
+					tx.executeSql('INSERT INTO '+sql.tabla+' ('+campos.join(',')+')  VALUES ('+asq.join(",")+')',valores,()=>{
+                        console.log("Insertado correctamente.");
+                    },(e)=>{
+                        console.log("Error al insertar",e);
+                    });
 				}
 				if(typeof fn ==="function") fn(true);
 			});
@@ -76,7 +80,7 @@ class dataBase{
 				let valores = [];
 				let asq = [];
 
-					console.log("es objeto");
+					console.log("es objeto", sql.tabla);
 					for(let io in sql.registro){ 
 						campos.push(io);
 						asq.push("?");

@@ -4,7 +4,53 @@
 html, body{
 	scroll-behavior: smooth;
 }
+.modal-vertical {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999999;
+    width: 90%;
+    max-width: 500px;
+}
 
+.modal-vertical-content {
+    position: relative;
+    color: #fff !important;
+    border-radius: 6px;
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+}
+
+.modal-vertical-header {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    color: #fff !important;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-vertical-header h5 {
+    margin: 0;
+    color: #fff !important;
+}
+
+.modal-vertical-body {
+    padding: 20px;
+    max-height: 70vh;
+    overflow-y: auto;
+    color: #fff !important;
+}
+
+.fondo-negro {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: rgba(0,0,0,0.5);
+}
 /*BUSQUEDA*/
 .resultado-busqueda{
 	height: 50vh;

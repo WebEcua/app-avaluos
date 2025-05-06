@@ -28,38 +28,44 @@ class Sistema {
         }
         
     }
-    init(){
-        
+    async init(){
         var acciones = this; 
         try{
-        this.base = new dataBase(function(){
-            //acciones.init();
-            acciones.obtieneDash();
-			//acciones.base.query({"tabla":tabla_activos},function(res){
-				if(typeof window.localStorage.servicios!='undefined' && window.localStorage.cliente!='') acciones.btnAgregarInventario();
-			//})
-			
-        });
-        }catch(e){
-            
+            // Inicializar base de datos con Promise
+            this.base = await new Promise((resolve, reject) => {
+                const db = new dataBase(function(){
+                    resolve(db);
+                });
+            });
+
+            // Ejecutar operaciones secuencialmente
+            await acciones.obtieneDash();
+
+            if(typeof window.localStorage.servicios !== 'undefined' && window.localStorage.cliente !== '') {
+                await acciones.btnAgregarInventario();
+            }
+
+            if(typeof window.localStorage.getItem('cliente') === "string") {
+                await acciones.pantallaCliente(window.localStorage.getItem('cliente'));
+            }
+
+            if(typeof window.localStorage.getItem('registros') === "string") {
+                $('#Pendientes').html(window.localStorage.registros);
+            }
+
+            await acciones.botonOpciones("agregar_registro");
+
+            if(typeof window.localStorage.getItem('proyecto') === "string") {
+                await acciones.pantallaProyecto(window.localStorage.getItem('proyecto'));
+            }
+
+            await acciones.obtieneLogs();
+            await acciones.botones();
+
+        } catch(e) {
+            console.error('Error en inicialización:', e);
             alert(JSON.stringify(e));
         }
-        //console.log(window.localStorage.getItem('cliente'));
-        if(typeof window.localStorage.getItem('cliente')==="string"){
-            acciones.pantallaCliente(window.localStorage.getItem('cliente'));
-        }/*else{
-            acciones.muestraClientes();
-        }*/
-        if(typeof window.localStorage.getItem('registros')==="string") $('#Pendientes').html(window.localStorage.registros);
-        
-        acciones.botonOpciones("agregar_registro");
-        if(typeof window.localStorage.getItem('proyecto')==="string"){
-            acciones.pantallaProyecto(window.localStorage.getItem('proyecto'));
-        }
-        
-        this.obtieneLogs();
-		this.botones();
-        
     }
     modal(titulo,contenido){
         $('#modal-grande').addClass('is-active')
@@ -171,36 +177,72 @@ class Sistema {
         $('#interaccion').removeClass('d-none');
         $('.authentication-1').addClass('d-none');
     }
-    consultaRegistro(){
-        var registro = this.base.query("select * from ser_registro",function(res){
+    async consultaRegistro() {
+        try {
+            // Consultar registros usando Promise
+            const registros = await new Promise((resolve, reject) => {
+                this.base.query("select * from ser_registro", function(res) {
+                    resolve(res);
+                });
+            });
+
+            let html = "";
+            for(let i in registros) {
+                if(typeof registros[i] === "object") {
+                    const registro = registros[i];
+                    const nombre = JSON.parse(registro.registro);
+                    
+                    html += `<div class="p-1">     
+                        <div class="card mb-1">
+                            <div class="card-body" id="dRegistro_${registro.id}">
+                                <div class="row">
+                                    <div class="col-2 text-dark">${registro.id}</div>
+                                    <div class="col text-dark">${nombre.descripcion}</div>
+                                    <div class="col-2">
+                                        <a class="btn btn-sm btn-danger" href="javascript:void(interfaz.eliminarRegistro(${registro.id}));"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </div>`;
+
+                    if(registro.imagenes_local) {
+                        html += '<div class="row mt-2">';
+                        try {
+                            // Obtener directorio de imágenes
+                            const dirEntry = await new Promise((resolve, reject) => {
+                                window.resolveLocalFileSystemURL(registro.imagenes_local, resolve, reject);
+                            });
+
+                            // Leer entradas del directorio
+                            const entries = await new Promise((resolve, reject) => {
+                                dirEntry.createReader().readEntries(resolve, reject);
+                            });
+
+                            // Procesar cada imagen
+                            for(const entry of entries) {
+                                if(entry.isFile) {
+                                    html += `<div class="col-4">
+                                        <img src="${entry.toURL()}" class="img-fluid" />
+                                    </div>`;
+                                }
+                            }
+                        } catch(err) {
+                            console.error('Error al cargar imágenes:', err);
+                        }
+                        html += '</div>';
+                    }
+
+                    html += '</div></div></div>';
+                }
+            }
+
+            if(!registros || registros.length === 0) {
+                html = "No existen resultados para la consulta que esta realizando";
+            }
             
-            var registros = res;
-           var html = "";
-           for(var i in registros){
-              if(typeof registros[i] ==="object"){
-               html+='<div class="p-1">';     
-               html+='<div class="card mb-1">';
-               var nombre = JSON.parse(registros[i].registro);
-                 
-                html+='<div class="card-body" id="dRegistro_'+registros[i].id+'">'+
-                        
-                         '<div class="row">'+
-                           
-                                '<div class="col-2 text-dark">'+registros[i].id+'</div>'+
-                                '<div class="col text-dark">'+nombre.descripcion+'</div>'+
-                                '<div class="col-2">'+
-                                    '<a class="btn btn-sm btn-danger" href="javascript:void(interfaz.eliminarRegistro('+registros[i].id+'));"><i class="fa fa-trash"></i></a>'+
-                                '</div>'+
-                           
-                         '</div>'+
-                        '</div>'+
-                      '</div>';
-               html+='</div>';
-              }
-           } 
-           if(res.rows.length==0) html = "No existen resultados para la consulta que esta realizando";
-           $('#historialRegistros').html(html);
-        });
+            $('#historialRegistros').html(html);
+        } catch(err) {
+            console.error('Error en consulta de registros:', err);
+            alert('Error al consultar registros');
+        }
     }
     eliminarRegistro(id){
         let acciones = this
@@ -730,17 +772,16 @@ class Sistema {
 					
 					console.log("INFO: cargando activos");
                     if(typeof res.registros.listado !=="undefined" &&  res.registros.listado!=null){
-                        acciones.base.delete({"tabla":tabla_activos},function(reg,msg){
-                         
+                        await acciones.base.delete({"tabla":tabla_activos},function(reg,msg){
+                            console.log(reg,"eliminando")
                         });
-                        
-                    
-
+                        console.log("INFO: cargando activos");
 
                         let sql_reg = [];
                         var cuenta = 0;
                         for (var il in res.registros.listado){
                             var listado = res.registros.listado[il];
+
 							let datos_insert = {};
 							datos_insert.registro = JSON.stringify(listado);
 							datos_insert.remoto   = listado.id;
@@ -749,15 +790,50 @@ class Sistema {
 							datos_insert.servicio = listado.servicio;
 							datos_insert.cliente  = listado.cliente;
                             //IMAGENES
-
-
-                            //IMAGENES
+                            let id_registro = listado.id;
+                            let imagenes = listado.imagenes;
+                            
+                            // Crear directorio para las imágenes del registro
+                            /*let dir_imagenes = `${cordova.file.dataDirectory}imagenes/${id_registro}/`;
+                            window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dirEntry) {
+                                dirEntry.getDirectory('imagenes', { create: true }, function(imagenesDirEntry) {
+                                    imagenesDirEntry.getDirectory(id_registro, { create: true }, function(registroDirEntry) {
+                                        // Descargar cada imagen
+                                        if(imagenes && imagenes.length > 0) {
+                                            imagenes.forEach(function(imagen) {
+                                                let fileTransfer = new FileTransfer();
+                                                let filename = imagen.nombre || `imagen_${Date.now()}.jpg`;
+                                                let uri = encodeURI(imagen.url);
+                                                let fileURL = dir_imagenes + filename;
+                                                
+                                                fileTransfer.download(
+                                                    uri,
+                                                    fileURL,
+                                                    function(entry) {
+                                                        console.log("Imagen descargada: " + entry.toURL());
+                                                    },
+                                                    function(error) {
+                                                        console.error("Error al descargar imagen: " + error.source);
+                                                    }
+                                                );
+                                            });
+                                        }
+                                    });
+                                });
+                            });
+                            
+                            // Guardar rutas de imágenes en el registro
+                            datos_insert.imagenes_local = dir_imagenes;
+                            */
 							sql_reg.push(datos_insert);
+                            
 							window.localStorage.registros = cuenta;
                             cuenta++;
                             
                         }
+                        console.log("INFO: insertando activos");
 						acciones.base.insert({"tabla":tabla_activos,"registro":sql_reg},function(id){
+                            console.log("INFO: insertando activos: "+id);
                         	acciones.obtieneDash();        
                         });
                       }  
@@ -1007,24 +1083,34 @@ class Sistema {
                window[i] =[];
            let ino = ob.dbg[i];
                for(var io in ino){
-                //console.log(ino[io]);
+                
                 window[i][ino[io].valor] = ino[io].texto;
                }
            }
            if(i=='activoModelos'){
                 let mod_ = ob.dbg[i];
-                funcion.modal('Registrando base de datos','Se esta guardando los parametros del formulario, espere un momento por favor. <i class="fa fa-spin fa-spinner"></i>')
+                funcion.llamaModalVertical('Registrando base de datos','Se esta guardando los parametros del formulario, espere un momento por favor.')
+                //$('#progressBarActivos').html('<div class="progress"><div class="progress-bar" role="progressbar" data-base="'+tabla_registros+'" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%</div></div>')
                 const tot = mod_.length;
                 let aumenta = 0
+                let sql_reg = [];
                 for(let io in mod_){
-                console.log("MODELO",mod_[io]);    
-                funcion.base.insert({"tabla":'ser_modelos','registro':{"remoto":mod_[io].valor,'nombre':mod_[io].texto}},function(id){
-                    //console.log('registra modelo en la base',mod_[io]) 
-                    aumenta++;
-                    if(aumenta>=tot) $('#modal-grande').removeClass('is-active')
-                });
                 
-            }
+                    let datos_insert = {};
+                    
+                    datos_insert.remoto   = mod_[io].valor;
+                    datos_insert.nombre   = mod_[io].texto;
+                    
+                    //IMAGENES
+
+
+                    //IMAGENES
+                    sql_reg.push(datos_insert);
+                
+                }
+                funcion.base.insert({"tabla":'ser_modelos','registro':sql_reg},function(id){
+                    funcion.cierraModalVertical();
+                });
            // 
            }
             //console.log(ob.db[i],i);
@@ -1032,7 +1118,6 @@ class Sistema {
 
         window.localStorage.servicios= JSON.stringify(ob.servicios);
         window.localStorage.clientes = JSON.stringify(ob.empresas);
-        console.log(ob.empresas)
         funcion.cargaDatos();
         
         
@@ -1064,7 +1149,7 @@ class Sistema {
             $('.select2[name="'+campo+'"]').append(nuevaOpcion).trigger('change');
         } else {
             // Si no se encuentra, mostrar un mensaje (puedes agregar lógica adicional aquí)
-            alert('El valor buscado no se encuentra en los datos.');
+            console.log('El valor buscado no se encuentra en los datos.');
         }
     }
     }
@@ -1083,7 +1168,7 @@ class Sistema {
 		    
 			acciones.formulario(window.localStorage.cliente,1);
 		
-		    console.log("Poblando")
+		    
 		
             for(var $ii in campos){   
                 try{
@@ -1123,13 +1208,50 @@ class Sistema {
                            })
                        }
                     break;
-                        
+                    case "originales":
+                        let originales = campos[$ii];
+						if(originales.length>0){
+							for(var o in originales){
+									switch(originales[o].id){
+										case "geo1":
+											$('[name="piso"]').parent().append('<div class="tag is-primary mt-1"><b>DATO ORIGINAL: </b>'+originales[o].valor+'</div>');
+										break;
+										
+										case "material":
+											$('[name="componente"]').parent().append('<div class="tag is-primary mt-1"><b>DATO ORIGINAL: </b>'+originales[o].valor+'</div>');
+										break;
+										case "marca":
+											
+											$('[name="activo_marca"]').parent().append('<div class="tag is-primary mt-1"><b>DATO ORIGINAL: </b>'+originales[o].valor+'</div>');
+										break;
+										case "modelo":
+											$('[name="activo_modelo"]').parent().append('<div class="tag is-primary mt-1"><b>DATO ORIGINAL: </b>'+originales[o].valor+'</div>');
+										break;
+										default:
+											$('[name="'+originales[o].id+'"]').parent().append('<div class="tag is-primary mt-1"><b>DATO ORIGINAL: </b>'+originales[o].valor+'</div>');
+										break;
+									}		
+									switch(originales[o].campo.toLowerCase()){
+										case "grupo":
+											$('[name="agrupados"]').parent().append('<div class="tag is-primary mt-1"><b>DATO Grupo: </b>'+originales[o].valor+'</div>');
+										break;
+										case "subgrupo":
+											$('[name="agrupados"]').parent().append('<div class="tag is-primary mt-1"><b>DATO Subgrupo: </b>'+originales[o].valor+'</div>');
+										break;
+										case "descripcion":
+											$('[name="agrupados"]').parent().append('<div class="tag is-primary mt-1"><b>DATO Subgrupo: </b>'+originales[o].valor+'</div>');
+										break;
+									}
+							}
+						}
+                    break
                     default:
                         
                     
                 
                         if($(acciones.form_id+' [name="'+$ii+'"]').attr('type')=="checkbox"){
                             if(campos[$ii]==1) $(acciones.form_id+' [name="'+$ii+'"]').prop("checked","checked"); else $(acciones.form_id+' [name="'+$ii+'"]').prop("checked","");
+                           
                         }else{
                             $(acciones.form_id+' [name="'+$ii+'"]').val(campos[$ii]).trigger('change');
                         }
@@ -1327,10 +1449,19 @@ class Sistema {
         //acciones.pueblaRegistros(cliente);
         
         var form = formulario[servicio].campos;
-            
-            for(var i in form){
+        let camposOrdenados = Object.keys(form).sort((a, b) => {
+            // Si existe la propiedad orden, usarla para ordenar
+            if (form[a].orden !== undefined && form[b].orden !== undefined) {
+                return form[a].orden - form[b].orden;
+            }
+            // Si no existe orden, mantener el orden del índice
+            return parseInt(a) - parseInt(b);
+        });
+
+            for(var i of camposOrdenados){
                
                 if(form[i]){
+
                     if(typeof grupo[form[i].grupo]==="undefined") grupo[form[i].grupo]="";
                     grupo[form[i].grupo]+='<div class="row mb-1 mt-1">';
                     grupo[form[i].grupo]+='<div class="col-12 '+(form[i].clase_padre)+'">';
@@ -1978,7 +2109,9 @@ class Sistema {
             var d = $(this).find('option:selected').attr('data-valor');
             $('.mira').addClass('d-none');
             if(typeof d !=="undefined" && d!=""){
+               
                 let mira = JSON.parse(d);
+                if(typeof mira.mira!=="undefined" && mira.mira!="")
                 $('.mira.'+mira.mira).removeClass('d-none');
             }
         });
@@ -2253,6 +2386,51 @@ class Sistema {
         
         
     }
+
+    llamaModalVertical(titulo, contenido) {
+        // Crear el fondo negro si no existe
+        if($('.fondo-negro').length == 0) {
+            $('body').append('<div class="fondo-negro"></div>');
+        }
+        
+        // Crear estructura del modal vertical
+        let modalHtml = `
+            <div class="modal-vertical">
+                <div class="modal-vertical-content">
+                    <div class="modal-vertical-header">
+                        <h5>${titulo}</h5>
+                        <button type="button" class="close" onclick="interfaz.cierra('modal')">&times;</button>
+                    </div>
+                    <div class="modal-vertical-body">
+                        ${contenido}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        $('.fondo-negro').html(modalHtml);
+    }
+    cierraModalVertical(){
+        $('.fondo-negro').remove();
+    }
+    llamaModalTransparente(titulo,contenido){
+        
+        var html = (
+					'<a class="cerrar">x</a>'+
+					
+					'<div class="container"><div class="text-center text-white"><h4 class="mx-4 border-bottom pb-4">'+titulo+'</h4></div>'+contenido+'</div>');
+        
+        
+        
+        
+		if($('.fondo-negro').length==0) $('body').append('<div class="fondo-negro">'+html+'</div>'); else $('.fondo-negro').html(html);
+        //$('body').append(html);
+        $('.fondo-negro .cerrar').on("click",function(){
+           $('.fondo-negro').remove(); 
+        });
+        
+        
+    }
     obtieneUbicacion(btn){
         try{
         navigator.geolocation.getCurrentPosition(function(position){
@@ -2355,6 +2533,7 @@ class Sistema {
         }).removeClass('disabled btn-default').addClass('btn-danger text-whte')
 		$('#validarInventario').unbind().on("click",function(e){
 			acciones.listadoValidacion();
+            
 		}).removeClass('disabled btn-default').addClass('btn-danger text-white');
 		
 	}
@@ -2459,15 +2638,40 @@ class Sistema {
     listadoValidacion(){
         const acciones = this;
         let html = "";
+        try{
             acciones.base.query({"tabla":tabla_activos},async function(e){
-                if(e){
+                
+                if(e.length>0){
+                    
                     for(let ac_ of e){
                         let registro = JSON.parse(ac_.registro);
-                        html+='<div class="item border-bottom pb-2 pt-2"><strong>QR: '+ac_.codigo+'</strong> <a href="javascript:void(interfaz.verActivo(\''+ac_.id+'\',\''+ac_.codigo+'\'))">ver activo</a> <div>'+activosAgrupados[registro.agrupados]+'</div></div>';
+                        
+                        html+='<div class="item border-bottom pb-2 pt-2">'+
+                       
+                            '<div class="row">'+
+                                '<div class="col is-8">'+
+                                    '<strong>'+ac_.codigo+'</strong>'+
+                                    '<div class="text-small small"><b>Código Anterior: </b>'+(typeof registro.codigo_barras_anterior !="undefined"? registro.codigo_barras_anterior:"")+'</div>'+
+                                    '<div>'+(typeof activosAgrupados[registro.agrupados]!="undefined"? activosAgrupados[registro.agrupados]:"")+'</div>'+
+                                '</div>'+
+                                '<div class="col is-4">'+
+                                    '<div class="text-right">'+
+                                        '<a class="btn btn-sm btn-primary" href="javascript:void(interfaz.verActivo(\''+ac_.id+'\',\''+ac_.codigo+'\'))">ver activo</a>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                       // '</div>'+
+                        '</div>';
+                        alert(html);
                     }
+                }else{
+                    console.log("No hay registros en la tabla",tabla_activos);
                 }
                 $('#listadoArticulos').html(html).removeClass('d-none');
         });
+    }catch(e){  
+        console.warn("listadoValidacion",e)
+    }
        
             $('[name="qr_busqueda"]').on('keyup', function () {
                 const query = $(this).val().toLowerCase(); // Texto ingresado
@@ -2507,7 +2711,7 @@ class Sistema {
 
         navigator.camera.getPicture(function cameraSuccess(imageUri) {
 
-            alert(imageUri);
+            //alert(imageUri);
 
         }, function cameraError(error) {
             alert("Unable to obtain picture: " + error, "app");
@@ -2662,12 +2866,13 @@ class Sistema {
             break;
             case "registros":
             $('#boton_opciones').unbind().addClass('btn-success').removeClass('d-none btn-danger btn-primary').html('<i class="fa fa-search"></i>').on("click",function(){
-                
+                alert("Consulta REgistros");
                 acciones.consultaRegistro();
             });
             this.muevePantalla(5);
             break;
             case "validar":
+                alert("Validar")
                 acciones.listadoValidacion()
                 
             break;

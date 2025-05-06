@@ -32,6 +32,7 @@ class Sistema {
         
         var acciones = this; 
         try{
+            console.log("Inicializando");
         this.base = new dataBase(function(){
             //acciones.init();
             acciones.obtieneDash();
@@ -729,37 +730,43 @@ class Sistema {
 					acciones.btnAgregarInventario();
 					
 					console.log("INFO: cargando activos");
+
                     if(typeof res.registros.listado !=="undefined" &&  res.registros.listado!=null){
                         acciones.base.delete({"tabla":tabla_activos},function(reg,msg){
+
+                            let sql_reg = [];
+                            var cuenta = 0;
+                            console.log("INFO: eliminando activos");
+                            console.log(res.registros.listado);
+                            for (var il in res.registros.listado){
+                                var listado = res.registros.listado[il];
+                                let datos_insert = {};
+                                datos_insert.registro = JSON.stringify(listado);
+                                datos_insert.remoto   = listado.id;
+                                datos_insert.estado   = listado.tipo;
+                                datos_insert.codigo   = listado.codigo_barras;
+                                datos_insert.servicio = listado.servicio;
+                                datos_insert.cliente  = listado.cliente;
+                                //IMAGENES
+
+                                console.log("Agrego los registros")
+                                //IMAGENES
+                                sql_reg.push(datos_insert);
+                                window.localStorage.registros = cuenta;
+                                cuenta++;
+                                
+                            }
+                            acciones.base.insert({"tabla":tabla_activos,"registro":sql_reg},function(id){
+                                acciones.obtieneDash();        
+                            });
+                            
                          
                         });
                         
                     
 
 
-                        let sql_reg = [];
-                        var cuenta = 0;
-                        for (var il in res.registros.listado){
-                            var listado = res.registros.listado[il];
-							let datos_insert = {};
-							datos_insert.registro = JSON.stringify(listado);
-							datos_insert.remoto   = listado.id;
-							datos_insert.estado   = listado.tipo;
-							datos_insert.codigo   = listado.codigo_barras;
-							datos_insert.servicio = listado.servicio;
-							datos_insert.cliente  = listado.cliente;
-                            //IMAGENES
-
-
-                            //IMAGENES
-							sql_reg.push(datos_insert);
-							window.localStorage.registros = cuenta;
-                            cuenta++;
-                            
-                        }
-						acciones.base.insert({"tabla":tabla_activos,"registro":sql_reg},function(id){
-                        	acciones.obtieneDash();        
-                        });
+                        
                       }  
                         
                     acciones.obtieneDash();  
@@ -1082,7 +1089,7 @@ class Sistema {
 		    
 			acciones.formulario(window.localStorage.cliente,1);
 		
-		    console.log("Poblando")
+		    
 		
             for(var $ii in campos){   
                 try{
@@ -1102,10 +1109,14 @@ class Sistema {
                         console.log(campos[$ii]);
                         acciones.buscarYSeleccionar(campos[$ii],$ii);
                     break;
+                    case "originales":
+                        alert("originales")
+
+                    break;
                     case "coordenadas":
                        if(campos[$ii]!=""){
                        let coordenadas = JSON.parse(campos[$ii]);
-                        console.log(coordenadas);
+                        
                         for(var coor in coordenadas){
                             console.log('[name="'+$ii+'['+coor+']"]',coordenadas[coor]);
                             if($(acciones.form_id+' [name="'+$ii+'['+coor+']"]').length>0){
@@ -2462,7 +2473,7 @@ class Sistema {
                 if(e){
                     for(let ac_ of e){
                         let registro = JSON.parse(ac_.registro);
-                        html+='<div class="item border-bottom pb-2 pt-2"><strong>QR: '+ac_.codigo+'</strong> <a href="javascript:void(interfaz.verActivo(\''+ac_.id+'\',\''+ac_.codigo+'\'))">ver activo</a> <div>'+activosAgrupados[registro.agrupados]+'</div></div>';
+                        html+='<div class="item border-bottom pb-2 pt-2"><strong>QR: '+ac_.codigo+'</strong> <a href="javascript:void(interfaz.verActivo(\''+ac_.id+'\',\''+ac_.codigo+'\'))" class="button button-sm is-primary">ver activo</a> <div>'+activosAgrupados[registro.agrupados]+'</div></div>';
                     }
                 }
                 $('#listadoArticulos').html(html).removeClass('d-none');

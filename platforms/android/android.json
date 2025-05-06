@@ -10,11 +10,11 @@
           "/manifest": [
             {
               "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
-              "count": 16
+              "count": 26
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
-              "count": 16
+              "count": 26
             },
             {
               "xml": "<uses-feature android:name=\"android.hardware.camera.autofocus\" android:required=\"false\" />",

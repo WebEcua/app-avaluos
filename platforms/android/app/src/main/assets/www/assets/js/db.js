@@ -2,22 +2,20 @@
 
 class dataBase{
     constructor(ok){
-       
-      try{
-      this.ddb;
-      this.prueba = "";
-      var acciones = this;
-      
-      //this.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
-       //alert("Inicia db");
-      this.conecta(ok);
-    
-        
-        
-      }catch(err){
-          alert(err);
-      }
-    
+       try{
+           this.ddb;
+           this.prueba = "";
+           var acciones = this;
+           
+           // Mantener la pantalla encendida
+           if (window.plugins && window.plugins.insomnia) {
+               window.plugins.insomnia.keepAwake();
+           }
+           
+           this.conecta(ok);
+       }catch(err){
+           alert(err);
+       }
     }
     conecta(fn){
         
@@ -67,8 +65,12 @@ class dataBase{
 						if(io==0){ campos.push(ios); asq.push("?"); }
 						valores.push((typeof registro[ios]==="undefined" ? "":registro[ios]));
 					}
-                    console.log('INSERT INTO '+sql.tabla+' ('+campos.join(',')+')  VALUES ('+asq.join(",")+')')
-					tx.executeSql('INSERT INTO '+sql.tabla+' ('+campos.join(',')+')  VALUES ('+asq.join(",")+')',valores);
+                    //console.log("INFO: insertantdo en tabla",sql.tabla)
+					tx.executeSql('INSERT INTO '+sql.tabla+' ('+campos.join(',')+')  VALUES ('+asq.join(",")+')',valores,()=>{
+                        console.log("Insertado correctamente.");
+                    },(e)=>{
+                        console.log("Error al insertar",e);
+                    });
 				}
 				if(typeof fn ==="function") fn(true);
 			});
@@ -78,7 +80,7 @@ class dataBase{
 				let valores = [];
 				let asq = [];
 
-					console.log("es objeto");
+					console.log("es objeto", sql.tabla);
 					for(let io in sql.registro){ 
 						campos.push(io);
 						asq.push("?");
@@ -131,12 +133,7 @@ class dataBase{
                 tx.executeSql('SELECT * FROM '+tabla.tabla+(" where "+(valores.join(','))), [], function(tx2,resp) {
                     let res = [];
                     for(var i= 0;i <= resp.rows.length-1;i++){
-                        if( /MacIntel/i.test(navigator.platform) ) {
-                    		res.push(resp.rows[i]);
-						}else{
-							res.push(resp.rows.item(i));
-						}
-                        
+							res.push(resp.rows.item(i));                   
                     }  
                     
                     

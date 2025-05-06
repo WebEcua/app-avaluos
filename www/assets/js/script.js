@@ -79,9 +79,11 @@ $(function(){
 
     
     interfaz = new Sistema('#formularios',_DOMINIO_);
-    alert();
+
     //interfaz.init();
     if( /MacIntel/i.test(navigator.platform) ) {
+
+        console.log("MACCCC")
     interfaz.init();
     }
        
@@ -149,7 +151,6 @@ function abreEvento(){
 	});
 	
 	$tarjetas.bind('cambiaPagina',function(ev){
-        console.log("cambia pagina");
 		$('.carousel-item').each(function(n,e){
 
 			if(n==parseInt(ev.pagina)){
